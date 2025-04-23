@@ -9,7 +9,78 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      simulacoes: {
+        Row: {
+          business_days: number
+          cdi_percentage: number | null
+          cdi_rate: number
+          created_at: string
+          days: number
+          end_date: string
+          fixed_rate: number | null
+          gross_return: number
+          id: string
+          investment_type: string
+          iof_tax: number
+          iof_value: number
+          ipca_rate: number
+          ir_tax: number
+          ir_value: number
+          modality_type: string
+          net_return: number
+          pre_fixed_rate: number | null
+          principal: number
+          selic_rate: number
+          start_date: string
+        }
+        Insert: {
+          business_days: number
+          cdi_percentage?: number | null
+          cdi_rate: number
+          created_at?: string
+          days: number
+          end_date: string
+          fixed_rate?: number | null
+          gross_return: number
+          id?: string
+          investment_type: string
+          iof_tax: number
+          iof_value: number
+          ipca_rate: number
+          ir_tax: number
+          ir_value: number
+          modality_type: string
+          net_return: number
+          pre_fixed_rate?: number | null
+          principal: number
+          selic_rate: number
+          start_date: string
+        }
+        Update: {
+          business_days?: number
+          cdi_percentage?: number | null
+          cdi_rate?: number
+          created_at?: string
+          days?: number
+          end_date?: string
+          fixed_rate?: number | null
+          gross_return?: number
+          id?: string
+          investment_type?: string
+          iof_tax?: number
+          iof_value?: number
+          ipca_rate?: number
+          ir_tax?: number
+          ir_value?: number
+          modality_type?: string
+          net_return?: number
+          pre_fixed_rate?: number | null
+          principal?: number
+          selic_rate?: number
+          start_date?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import InvestmentForm, { InvestmentFormData } from "@/components/InvestmentForm";
 import InvestmentResults from "@/components/InvestmentResults";
@@ -12,12 +11,13 @@ import {
   calculateIPCAReturns,
   generateChartData,
 } from "@/utils/investment-utils";
+import { saveSimulation } from "@/services/simulation";
 
 const Index = () => {
   const [showResults, setShowResults] = useState(false);
   const [results, setResults] = useState<any>(null);
 
-  const handleCalculate = (formData: InvestmentFormData) => {
+  const handleCalculate = async (formData: InvestmentFormData) => {
     // Calculate business days between start and end date
     const businessDays = calculateBusinessDays(
       formData.startDate, 
@@ -93,7 +93,32 @@ const Index = () => {
       }
     );
     
-    // Set results
+    // After calculating results, save to Supabase
+    const simulationData = {
+      investment_type: formData.investmentType,
+      modality_type: formData.modalityType,
+      selic_rate: formData.selicRate,
+      cdi_rate: formData.cdiRate,
+      ipca_rate: formData.ipcaRate,
+      pre_fixed_rate: formData.preFixedRate,
+      cdi_percentage: formData.cdiPercentage,
+      fixed_rate: formData.fixedRate,
+      start_date: formData.startDate,
+      end_date: formData.endDate,
+      principal: formData.principal,
+      gross_return: grossReturn,
+      days,
+      business_days: businessDays,
+      ir_tax: irTaxRate,
+      ir_value: irValue,
+      iof_tax: iofTaxRate,
+      iof_value: iofValue,
+      net_return: netReturn,
+    };
+
+    await saveSimulation(simulationData);
+    
+    // Set results and show them
     setResults({
       principal: formData.principal,
       startDate: formData.startDate,
