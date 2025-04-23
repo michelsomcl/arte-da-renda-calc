@@ -26,9 +26,16 @@ export interface SimulationData {
 
 export async function saveSimulation(data: SimulationData) {
   try {
+    // Convert Date objects to ISO strings for Supabase
+    const formattedData = {
+      ...data,
+      start_date: data.start_date.toISOString(),
+      end_date: data.end_date.toISOString()
+    };
+
     const { error } = await supabase
       .from('simulacoes')
-      .insert([data]);
+      .insert(formattedData);
 
     if (error) throw error;
 

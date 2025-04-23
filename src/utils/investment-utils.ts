@@ -1,4 +1,3 @@
-
 // Calculate business days between two dates
 export const calculateBusinessDays = (startDate: Date, endDate: Date): number => {
   let count = 0;
@@ -38,35 +37,36 @@ export const getMonthsBetweenDates = (startDate: Date, endDate: Date): Date[] =>
 export const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('pt-BR', { 
     style: 'currency', 
-    currency: 'BRL'
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(value);
 };
 
 // Format percentage values
 export const formatPercentage = (value: number): string => {
-  return new Intl.NumberFormat('pt-BR', { 
-    style: 'percent', 
+  return value.toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }).format(value / 100);
+  }) + '%';
 };
 
 // Parse currency input
 export const parseCurrencyInput = (value: string): number => {
-  return Number(value.replace(/[^\d.,]/g, '').replace(',', '.'));
+  return Number(value.replace(/\./g, '').replace(',', '.'));
 };
 
 // Parse percentage input
 export const parsePercentageInput = (value: string): number => {
-  return Number(value.replace(/[^\d.,]/g, '').replace(',', '.'));
+  return Number(value.replace(',', '.'));
 };
 
 // Calculate IR tax based on investment period
 export const calculateIRTax = (days: number): number => {
-  if (days <= 180) return 0.225;       // 22.5%
-  if (days <= 360) return 0.20;        // 20%
-  if (days <= 720) return 0.175;       // 17.5%
-  return 0.15;                         // 15%
+  if (days <= 180) return 0.225;      // 22.5%
+  if (days <= 360) return 0.20;       // 20%
+  if (days <= 720) return 0.175;      // 17.5%
+  return 0.15;                        // 15%
 };
 
 // Calculate IOF tax based on investment period
@@ -80,7 +80,7 @@ export const calculateIOFTax = (days: number): number => {
     0.30, 0.26, 0.23, 0.20, 0.16, 0.13, 0.10, 0.06, 0.03, 0.00
   ];
   
-  return iofTable[days - 1] || 0;
+  return (days > 0 && days <= 30) ? iofTable[days - 1] / 100 : 0;
 };
 
 // Calculate pre-fixed investment returns

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -43,6 +42,20 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     principal: 1000,
   });
 
+  const formatNumberInput = (value: string, isPercentage: boolean = true) => {
+    const numValue = value.replace(/[^\d,]/g, '').replace(/\./g, '');
+    if (!numValue) return '';
+    
+    const normalized = numValue.replace(',', '.');
+    const number = parseFloat(normalized);
+    if (isNaN(number)) return '';
+    
+    return number.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) + (isPercentage ? '%' : '');
+  };
+
   const handleSelicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selicValue = parsePercentageInput(e.target.value);
     setFormData({
@@ -53,18 +66,23 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>, 
+    e: React.ChangeEvent<HTMLInputElement>,
     field: keyof InvestmentFormData
   ) => {
+    const value = e.target.value.replace(/%/g, '');
+    
     if (field === "principal") {
+      const numValue = parseCurrencyInput(value);
       setFormData({
         ...formData,
-        [field]: parseCurrencyInput(e.target.value),
+        [field]: numValue,
       });
     } else {
+      const numValue = parsePercentageInput(value);
       setFormData({
         ...formData,
-        [field]: parsePercentageInput(e.target.value),
+        [field]: numValue,
+        cdiRate: field === "selicRate" ? Math.max(0, numValue - 0.1) : formData.cdiRate,
       });
     }
   };
@@ -121,7 +139,10 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
                   variant="outline" 
                   size="sm" 
                   className="text-xs h-7 px-2 py-1"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('https://www.bcb.gov.br/controleinflacao/historicotaxasjuros', '_blank');
+                  }}
                 >
                   Consultar
                 </Button>
@@ -149,8 +170,8 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
           <Input
             id="selicRate"
             type="text"
-            value={formData.selicRate}
-            onChange={handleSelicChange}
+            value={formatNumberInput(formData.selicRate.toString())}
+            onChange={(e) => handleInputChange(e, "selicRate")}
             className="text-right"
           />
         </div>
@@ -175,7 +196,10 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
                   variant="outline" 
                   size="sm" 
                   className="text-xs h-7 px-2 py-1"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('https://www.ibge.gov.br/explica/inflacao.php', '_blank');
+                  }}
                 >
                   Consultar
                 </Button>
@@ -203,20 +227,19 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
           <Input
             id="ipcaRate"
             type="text"
-            value={formData.ipcaRate}
+            value={formatNumberInput(formData.ipcaRate.toString())}
             onChange={(e) => handleInputChange(e, "ipcaRate")}
             className="text-right"
           />
         </div>
 
-        {/* Dynamic fields based on modality */}
         {formData.modalityType === "pre-fixed" && (
           <div className="space-y-3">
             <Label htmlFor="preFixedRate">Taxa Pré-fixada (%)</Label>
             <Input
               id="preFixedRate"
               type="text"
-              value={formData.preFixedRate || ""}
+              value={formatNumberInput(formData.preFixedRate?.toString() || '0')}
               onChange={(e) => handleInputChange(e, "preFixedRate")}
               className="text-right"
             />
@@ -229,7 +252,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             <Input
               id="cdiPercentage"
               type="text"
-              value={formData.cdiPercentage || ""}
+              value={formatNumberInput(formData.cdiPercentage?.toString() || '0')}
               onChange={(e) => handleInputChange(e, "cdiPercentage")}
               className="text-right"
             />
@@ -242,7 +265,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             <Input
               id="fixedRate"
               type="text"
-              value={formData.fixedRate || ""}
+              value={formatNumberInput(formData.fixedRate?.toString() || '0')}
               onChange={(e) => handleInputChange(e, "fixedRate")}
               className="text-right"
             />
@@ -322,7 +345,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             <Input
               id="principal"
               type="text"
-              value={formData.principal.toFixed(2).replace('.', ',')}
+              value={formatNumberInput(formData.principal.toString(), false)}
               onChange={(e) => handleInputChange(e, "principal")}
               className="text-right"
             />
