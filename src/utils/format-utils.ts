@@ -19,21 +19,19 @@ export const formatNumberInput = (value: string, isPercentage: boolean = true) =
 };
 
 export const formatCurrencyInput = (value: string) => {
-  if (!value) return "0,00";
+  if (!value) return "R$ 0,00";
   
   // Remove non-numeric characters except for comma and period
   const numValue = value.replace(/[^\d,.]/g, '');
-  if (!numValue) return "0,00";
+  if (!numValue) return "R$ 0,00";
   
   // Convert to number (replace comma with period for JS parsing)
   const normalized = numValue.replace(/\./g, '').replace(',', '.');
   const number = parseFloat(normalized);
-  if (isNaN(number)) return "0,00";
+  if (isNaN(number)) return "R$ 0,00";
   
   // Format with Brazilian locale (comma as decimal separator, period as thousand separator)
-  return number.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
+  return "R$ " + number.toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
