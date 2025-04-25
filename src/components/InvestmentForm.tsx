@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
-import { parsePercentageInput, parseCurrencyInput } from "@/utils/investment-utils";
+import { formatPercentage, parsePercentageInput, parseCurrencyInput } from "@/utils/investment-utils";
 
 interface InvestmentFormProps {
   onCalculate: (formData: InvestmentFormData) => void;
@@ -42,36 +42,107 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
     principal: 1000,
   });
+  
+  // Add state to track current input values
+  const [selicInput, setSelicInput] = useState(formatPercentage(formData.selicRate));
+  const [ipcaInput, setIpcaInput] = useState(formatPercentage(formData.ipcaRate));
+  const [preFixedInput, setPreFixedInput] = useState(formatPercentage(formData.preFixedRate || 0));
+  const [cdiPercentageInput, setCdiPercentageInput] = useState(formatPercentage(formData.cdiPercentage || 100));
+  const [fixedRateInput, setFixedRateInput] = useState(formatPercentage(formData.fixedRate || 0));
+  const [principalInput, setPrincipalInput] = useState(formData.principal.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2
+  }));
 
   const handleSelicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selicValue = parsePercentageInput(e.target.value);
+    const inputValue = e.target.value;
+    setSelicInput(inputValue);
+    
+    const numericValue = parsePercentageInput(inputValue);
+    
     setFormData({
       ...formData,
-      selicRate: selicValue,
-      cdiRate: Math.max(0, selicValue - 0.1), // CDI = SELIC - 0.1
+      selicRate: numericValue,
+      cdiRate: Math.max(0, numericValue - 0.1), // CDI = SELIC - 0.1
     });
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>, 
-    field: keyof InvestmentFormData
-  ) => {
-    if (field === "principal") {
-      setFormData({
-        ...formData,
-        [field]: parseCurrencyInput(e.target.value),
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [field]: parsePercentageInput(e.target.value),
-      });
-    }
+  const handleIpcaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setIpcaInput(inputValue);
+    
+    const numericValue = parsePercentageInput(inputValue);
+    
+    setFormData({
+      ...formData,
+      ipcaRate: numericValue,
+    });
+  };
+
+  const handlePreFixedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setPreFixedInput(inputValue);
+    
+    const numericValue = parsePercentageInput(inputValue);
+    
+    setFormData({
+      ...formData,
+      preFixedRate: numericValue,
+    });
+  };
+
+  const handleCdiPercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setCdiPercentageInput(inputValue);
+    
+    const numericValue = parsePercentageInput(inputValue);
+    
+    setFormData({
+      ...formData,
+      cdiPercentage: numericValue,
+    });
+  };
+
+  const handleFixedRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setFixedRateInput(inputValue);
+    
+    const numericValue = parsePercentageInput(inputValue);
+    
+    setFormData({
+      ...formData,
+      fixedRate: numericValue,
+    });
+  };
+
+  const handlePrincipalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setPrincipalInput(inputValue);
+    
+    const numericValue = parseCurrencyInput(inputValue);
+    
+    setFormData({
+      ...formData,
+      principal: numericValue,
+    });
   };
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault();
     onCalculate(formData);
+  };
+
+  const handleBlurPercentage = (e: React.FocusEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>, value: number) => {
+    setter(formatPercentage(value));
+  };
+
+  const handleBlurCurrency = (e: React.FocusEvent<HTMLInputElement>) => {
+    setPrincipalInput(formData.principal.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2
+    }));
   };
 
   return (
@@ -149,8 +220,9 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
           <Input
             id="selicRate"
             type="text"
-            value={formData.selicRate}
+            value={selicInput}
             onChange={handleSelicChange}
+            onBlur={(e) => handleBlurPercentage(e, setSelicInput, formData.selicRate)}
             className="text-right"
           />
         </div>
@@ -160,7 +232,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
           <Input
             id="cdiRate"
             type="text"
-            value={formData.cdiRate.toFixed(2)}
+            value={formatPercentage(formData.cdiRate)}
             disabled
             className="text-right bg-muted"
           />
@@ -203,8 +275,9 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
           <Input
             id="ipcaRate"
             type="text"
-            value={formData.ipcaRate}
-            onChange={(e) => handleInputChange(e, "ipcaRate")}
+            value={ipcaInput}
+            onChange={handleIpcaChange}
+            onBlur={(e) => handleBlurPercentage(e, setIpcaInput, formData.ipcaRate)}
             className="text-right"
           />
         </div>
@@ -216,8 +289,9 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             <Input
               id="preFixedRate"
               type="text"
-              value={formData.preFixedRate || ""}
-              onChange={(e) => handleInputChange(e, "preFixedRate")}
+              value={preFixedInput}
+              onChange={handlePreFixedChange}
+              onBlur={(e) => handleBlurPercentage(e, setPreFixedInput, formData.preFixedRate || 0)}
               className="text-right"
             />
           </div>
@@ -229,8 +303,9 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             <Input
               id="cdiPercentage"
               type="text"
-              value={formData.cdiPercentage || ""}
-              onChange={(e) => handleInputChange(e, "cdiPercentage")}
+              value={cdiPercentageInput}
+              onChange={handleCdiPercentageChange}
+              onBlur={(e) => handleBlurPercentage(e, setCdiPercentageInput, formData.cdiPercentage || 0)}
               className="text-right"
             />
           </div>
@@ -242,8 +317,9 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             <Input
               id="fixedRate"
               type="text"
-              value={formData.fixedRate || ""}
-              onChange={(e) => handleInputChange(e, "fixedRate")}
+              value={fixedRateInput}
+              onChange={handleFixedRateChange}
+              onBlur={(e) => handleBlurPercentage(e, setFixedRateInput, formData.fixedRate || 0)}
               className="text-right"
             />
           </div>
@@ -322,8 +398,9 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             <Input
               id="principal"
               type="text"
-              value={formData.principal.toFixed(2).replace('.', ',')}
-              onChange={(e) => handleInputChange(e, "principal")}
+              value={principalInput}
+              onChange={handlePrincipalChange}
+              onBlur={handleBlurCurrency}
               className="text-right"
             />
           </div>

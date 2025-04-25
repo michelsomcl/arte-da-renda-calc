@@ -1,4 +1,3 @@
-
 // Calculate business days between two dates
 export const calculateBusinessDays = (startDate: Date, endDate: Date): number => {
   let count = 0;
@@ -44,21 +43,26 @@ export const formatCurrency = (value: number): string => {
 
 // Format percentage values
 export const formatPercentage = (value: number): string => {
-  return new Intl.NumberFormat('pt-BR', { 
-    style: 'percent', 
+  return value.toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(value / 100);
+    maximumFractionDigits: 2,
+  }) + '%';
 };
 
 // Parse currency input
-export const parseCurrencyInput = (value: string): number => {
-  return Number(value.replace(/[^\d.,]/g, '').replace(',', '.'));
+export const parseCurrencyInput = (input: string): number => {
+  // Remove currency symbol and any thousand separators, then replace comma with dot
+  const cleanedInput = input.replace(/[R$\s.]/g, '').replace(',', '.');
+  const parsedValue = parseFloat(cleanedInput);
+  return isNaN(parsedValue) ? 0 : parsedValue;
 };
 
 // Parse percentage input
-export const parsePercentageInput = (value: string): number => {
-  return Number(value.replace(/[^\d.,]/g, '').replace(',', '.'));
+export const parsePercentageInput = (input: string): number => {
+  // Remove percentage symbol and any thousand separators, then replace comma with dot
+  const cleanedInput = input.replace(/[%.]/g, '').replace(',', '.');
+  const parsedValue = parseFloat(cleanedInput);
+  return isNaN(parsedValue) ? 0 : parsedValue;
 };
 
 // Calculate IR tax based on investment period
