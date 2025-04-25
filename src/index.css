@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,10 +100,8 @@
   }
 }
 
-/* Custom styling for currency input */
 .currency-input {
   position: relative;
-  width: 100%;
 }
 
 .currency-input::before {
