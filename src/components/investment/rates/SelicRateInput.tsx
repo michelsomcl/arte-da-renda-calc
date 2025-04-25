@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { formatNumberInput } from "@/utils/format-utils";
+import { formatNumberInput, handleNumericInput } from "@/utils/format-utils";
 
 interface SelicRateInputProps {
   value: number;
@@ -12,6 +12,21 @@ interface SelicRateInputProps {
 }
 
 export const SelicRateInput: React.FC<SelicRateInputProps> = ({ value, onChange }) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    
+    // Create a synthetic event with the processed numeric value
+    const syntheticEvent = {
+      ...e,
+      target: {
+        ...e.target,
+        value: String(handleNumericInput(rawValue, value, true))
+      }
+    };
+    
+    onChange(syntheticEvent, "selicRate");
+  };
+
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-center">
@@ -54,7 +69,7 @@ export const SelicRateInput: React.FC<SelicRateInputProps> = ({ value, onChange 
         id="selicRate"
         type="text"
         value={formatNumberInput(value.toString())}
-        onChange={(e) => onChange(e, "selicRate")}
+        onChange={handleInputChange}
         className="text-right"
       />
     </div>

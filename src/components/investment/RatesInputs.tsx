@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { SelicRateInput } from "./rates/SelicRateInput";
 import { CdiRateInput } from "./rates/CdiRateInput";
 import { IpcaRateInput } from "./rates/IpcaRateInput";
-import { formatNumberInput } from "@/utils/format-utils";
+import { formatNumberInput, handleNumericInput } from "@/utils/format-utils";
 
 interface RatesInputsProps {
   selicRate: number;
@@ -28,6 +28,26 @@ export const RatesInputs: React.FC<RatesInputsProps> = ({
   modalityType,
   onInputChange,
 }) => {
+  const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const rawValue = e.target.value;
+    const currentValue = field === "preFixedRate" 
+      ? preFixedRate || 0 
+      : field === "cdiPercentage" 
+        ? cdiPercentage || 0 
+        : fixedRate || 0;
+    
+    // Create a synthetic event with the processed numeric value
+    const syntheticEvent = {
+      ...e,
+      target: {
+        ...e.target,
+        value: String(handleNumericInput(rawValue, currentValue, true))
+      }
+    };
+    
+    onInputChange(syntheticEvent, field);
+  };
+
   return (
     <>
       <SelicRateInput value={selicRate} onChange={onInputChange} />
@@ -41,7 +61,7 @@ export const RatesInputs: React.FC<RatesInputsProps> = ({
             id="preFixedRate"
             type="text"
             value={formatNumberInput(preFixedRate?.toString() || '0')}
-            onChange={(e) => onInputChange(e, "preFixedRate")}
+            onChange={(e) => handleCustomInputChange(e, "preFixedRate")}
             className="text-right"
           />
         </div>
@@ -54,7 +74,7 @@ export const RatesInputs: React.FC<RatesInputsProps> = ({
             id="cdiPercentage"
             type="text"
             value={formatNumberInput(cdiPercentage?.toString() || '0')}
-            onChange={(e) => onInputChange(e, "cdiPercentage")}
+            onChange={(e) => handleCustomInputChange(e, "cdiPercentage")}
             className="text-right"
           />
         </div>
@@ -67,7 +87,7 @@ export const RatesInputs: React.FC<RatesInputsProps> = ({
             id="fixedRate"
             type="text"
             value={formatNumberInput(fixedRate?.toString() || '0')}
-            onChange={(e) => onInputChange(e, "fixedRate")}
+            onChange={(e) => handleCustomInputChange(e, "fixedRate")}
             className="text-right"
           />
         </div>

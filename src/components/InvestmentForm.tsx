@@ -6,7 +6,11 @@ import { Label } from "@/components/ui/label";
 import { InvestmentTypeInputs } from "./investment/InvestmentTypeInputs";
 import { RatesInputs } from "./investment/RatesInputs";
 import { DateInputs } from "./investment/DateInputs";
-import { formatCurrencyInput, parseCurrencyInput, parsePercentageInput } from "@/utils/format-utils";
+import { 
+  formatCurrencyInput, 
+  parseCurrencyInput, 
+  handleNumericInput
+} from "@/utils/format-utils";
 
 interface InvestmentFormProps {
   onCalculate: (formData: InvestmentFormData) => void;
@@ -46,19 +50,29 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     const value = e.target.value;
     
     if (field === "principal") {
-      const numValue = parseCurrencyInput(value);
+      const numValue = handleNumericInput(value, formData.principal, false);
       setFormData({
         ...formData,
         [field]: numValue,
       });
     } else {
-      const numValue = parsePercentageInput(value);
+      const numValue = parseFloat(value);
       setFormData({
         ...formData,
         [field]: numValue,
         cdiRate: field === "selicRate" ? Math.max(0, numValue - 0.1) : formData.cdiRate,
       });
     }
+  };
+
+  const handlePrincipalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    const numValue = handleNumericInput(rawValue, formData.principal, false);
+    
+    setFormData({
+      ...formData,
+      principal: numValue,
+    });
   };
 
   const handleCalculate = (e: React.FormEvent) => {
@@ -100,7 +114,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
             id="principal"
             type="text"
             value={formatCurrencyInput(formData.principal.toString())}
-            onChange={(e) => handleInputChange(e, "principal")}
+            onChange={handlePrincipalChange}
             className="text-right"
           />
         </div>
