@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { InvestmentTypeInputs } from "./investment/InvestmentTypeInputs";
 import { RatesInputs } from "./investment/RatesInputs";
 import { DateInputs } from "./investment/DateInputs";
+import { formatCurrencyInput, parseCurrencyInput, parsePercentageInput } from "@/utils/format-utils";
 
 interface InvestmentFormProps {
   onCalculate: (formData: InvestmentFormData) => void;
@@ -42,7 +43,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof InvestmentFormData
   ) => {
-    const value = e.target.value.replace(/%/g, '');
+    const value = e.target.value;
     
     if (field === "principal") {
       const numValue = parseCurrencyInput(value);
@@ -63,21 +64,6 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault();
     onCalculate(formData);
-  };
-
-  const parseCurrencyInput = (value: string): number => {
-    return Number(value.replace(/\./g, '').replace(',', '.'));
-  };
-
-  const parsePercentageInput = (value: string): number => {
-    return Number(value.replace(',', '.'));
-  };
-
-  const formatCurrency = (value: number): string => {
-    return value.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
   };
 
   return (
@@ -110,15 +96,13 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
 
         <div className="space-y-3">
           <Label htmlFor="principal">Valor do Aporte</Label>
-          <div className="currency-input">
-            <Input
-              id="principal"
-              type="text"
-              value={formatCurrency(formData.principal)}
-              onChange={(e) => handleInputChange(e, "principal")}
-              className="text-right"
-            />
-          </div>
+          <Input
+            id="principal"
+            type="text"
+            value={formatCurrencyInput(formData.principal.toString())}
+            onChange={(e) => handleInputChange(e, "principal")}
+            className="text-right"
+          />
         </div>
       </div>
 
