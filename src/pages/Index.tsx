@@ -117,7 +117,7 @@ const Index = () => {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold text-invest-dark">
-            Simulador de Investimentos Renda Fixa
+            Simulador de Investimentos Renda Fixa - Arte da Renda
           </h1>
         </div>
       </header>
@@ -130,7 +130,7 @@ const Index = () => {
         {results && <InvestmentResults results={results} visible={showResults} />}
       </main>
       <footer className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-        <p>© 2025 Simulador de Investimentos Renda Fixa</p>
+        <p>© 2025 Simulador de Investimentos Renda Fixa - Arte da Renda</p>
       </footer>
     </div>
   );

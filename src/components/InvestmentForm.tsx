@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -43,7 +42,6 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     principal: 1000,
   });
   
-  // Add state to track current input values
   const [selicInput, setSelicInput] = useState(formatPercentage(formData.selicRate));
   const [ipcaInput, setIpcaInput] = useState(formatPercentage(formData.ipcaRate));
   const [preFixedInput, setPreFixedInput] = useState(formatPercentage(formData.preFixedRate || 0));
@@ -145,6 +143,10 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     }));
   };
 
+  const handleOpenExternalLink = (url: string) => {
+    window.open(url, '_blank', 'width=800,height=600');
+  };
+
   return (
     <form onSubmit={handleCalculate} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -186,36 +188,17 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <Label htmlFor="selicRate">SELIC atual (%)</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-xs h-7 px-2 py-1"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Consultar
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80">
-                <div className="space-y-2">
-                  <h3 className="font-medium">Histórico de taxas de juros</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Consulte o histórico de taxas SELIC no site do Banco Central do Brasil.
-                  </p>
-                  <div className="flex justify-end">
-                    <a 
-                      href="https://www.bcb.gov.br/controleinflacao/historicotaxasjuros" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-sm text-primary hover:underline"
-                    >
-                      Acessar site do BCB
-                    </a>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs h-7 px-2 py-1"
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpenExternalLink('https://www.bcb.gov.br/controleinflacao/historicotaxasjuros');
+              }}
+            >
+              Consultar
+            </Button>
           </div>
           <Input
             id="selicRate"
@@ -241,36 +224,17 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <Label htmlFor="ipcaRate">IPCA atual (%)</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-xs h-7 px-2 py-1"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Consultar
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80">
-                <div className="space-y-2">
-                  <h3 className="font-medium">Índice de inflação</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Consulte o IPCA no site do IBGE.
-                  </p>
-                  <div className="flex justify-end">
-                    <a 
-                      href="https://www.ibge.gov.br/explica/inflacao.php" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-sm text-primary hover:underline"
-                    >
-                      Acessar site do IBGE
-                    </a>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs h-7 px-2 py-1"
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpenExternalLink('https://www.ibge.gov.br/explica/inflacao.php');
+              }}
+            >
+              Consultar
+            </Button>
           </div>
           <Input
             id="ipcaRate"
@@ -282,7 +246,6 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
           />
         </div>
 
-        {/* Dynamic fields based on modality */}
         {formData.modalityType === "pre-fixed" && (
           <div className="space-y-3">
             <Label htmlFor="preFixedRate">Taxa Pré-fixada (%)</Label>
