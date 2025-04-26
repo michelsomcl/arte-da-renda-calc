@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InvestmentForm, { InvestmentFormData } from "@/components/InvestmentForm";
+import InvestmentForm from "@/components/InvestmentForm";
 import InvestmentResults from "@/components/InvestmentResults";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
   calculateIPCAReturns,
   generateChartData,
 } from "@/utils/investment-utils";
+import { InvestmentFormData } from "@/types/investment";
 
 const Index = () => {
   const [showResults, setShowResults] = useState(false);
@@ -135,14 +136,14 @@ const Index = () => {
               className="text-[#7615ab] hover:text-[#7615ab]/80"
               onClick={() => window.open('https://www.instagram.com/artedarendainvest', '_blank', 'width=800,height=600')}
             >
-              Instagram
+              Visite nosso Instagram
             </Button>
             <Button
               variant="link"
               className="text-[#7615ab] hover:text-[#7615ab]/80"
               onClick={() => window.open('https://www.artedarenda.com.br/', '_blank', 'width=800,height=600')}
             >
-              Blog
+              Visite nosso Blog
             </Button>
           </div>
         )}

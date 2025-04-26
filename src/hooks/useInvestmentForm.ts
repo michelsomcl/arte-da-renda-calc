@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { InvestmentFormData } from "@/types/investment";
 import { formatPercentage, parseCurrencyInput, parsePercentageInput } from "@/utils/investment-utils";
@@ -7,26 +6,22 @@ export const useInvestmentForm = () => {
   const [formData, setFormData] = useState<InvestmentFormData>({
     investmentType: "CDB",
     modalityType: "pre-fixed",
-    selicRate: 11.25,
+    selicRate: 0,
     cdiRate: 11.15,
-    ipcaRate: 4.5,
-    preFixedRate: 12.0,
+    ipcaRate: 0,
+    preFixedRate: 0,
     startDate: new Date(),
     endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-    principal: 1000,
+    principal: 0,
   });
 
   const [inputs, setInputs] = useState({
-    selicInput: formatPercentage(formData.selicRate),
-    ipcaInput: formatPercentage(formData.ipcaRate),
-    preFixedInput: formatPercentage(formData.preFixedRate || 0),
-    cdiPercentageInput: formatPercentage(formData.cdiPercentage || 100),
-    fixedRateInput: formatPercentage(formData.fixedRate || 0),
-    principalInput: formData.principal.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2
-    })
+    selicInput: "",
+    ipcaInput: "",
+    preFixedInput: "",
+    cdiPercentageInput: formatPercentage(100),
+    fixedRateInput: formatPercentage(0),
+    principalInput: ""
   });
 
   const handleSelicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,4 +126,3 @@ export const useInvestmentForm = () => {
     }
   };
 };
-
