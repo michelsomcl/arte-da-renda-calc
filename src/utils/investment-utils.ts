@@ -65,16 +65,26 @@ export const parsePercentageInput = (input: string): number => {
   return isNaN(parsedValue) ? 0 : parsedValue;
 };
 
-// Calculate IR tax based on investment period
-export const calculateIRTax = (days: number): number => {
+// Calculate IR tax based on investment period and type
+export const calculateIRTax = (days: number, investmentType: string): number => {
+  // No IR tax for LCD, LCI, and LCA
+  if (['LCD', 'LCI', 'LCA'].includes(investmentType)) {
+    return 0;
+  }
+  
   if (days <= 180) return 0.225;       // 22.5%
   if (days <= 360) return 0.20;        // 20%
   if (days <= 720) return 0.175;       // 17.5%
   return 0.15;                         // 15%
 };
 
-// Calculate IOF tax based on investment period
-export const calculateIOFTax = (days: number): number => {
+// Calculate IOF tax based on investment period and type
+export const calculateIOFTax = (days: number, investmentType: string): number => {
+  // No IOF tax for LCD, LCI, and LCA
+  if (['LCD', 'LCI', 'LCA'].includes(investmentType)) {
+    return 0;
+  }
+  
   if (days >= 30) return 0;
   
   // IOF tax table (percentage decreases with days)

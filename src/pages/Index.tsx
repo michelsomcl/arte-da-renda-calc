@@ -114,9 +114,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
+      <header className="bg-invest shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold text-invest-dark">
+          <h1 className="text-2xl font-bold text-white">
             Simulador de Investimentos Renda Fixa - Arte da Renda
           </h1>
         </div>
@@ -127,10 +127,35 @@ const Index = () => {
           <InvestmentForm onCalculate={handleCalculate} />
         </div>
         
-        {results && <InvestmentResults results={results} visible={showResults} />}
+        {results && (
+          <div className="scroll-mt-8" id="results">
+            <InvestmentResults results={results} visible={showResults} />
+          </div>
+        )}
+        
+        {showResults && (
+          <div className="mt-8 flex justify-center gap-6">
+            <Button
+              variant="link"
+              className="text-invest hover:text-invest/80"
+              onClick={() => window.open('https://www.instagram.com/artedarendainvest', '_blank', 'width=800,height=600')}
+            >
+              Instagram
+            </Button>
+            <Button
+              variant="link"
+              className="text-invest hover:text-invest/80"
+              onClick={() => window.open('https://www.artedarenda.com.br/', '_blank', 'width=800,height=600')}
+            >
+              Blog
+            </Button>
+          </div>
+        )}
       </main>
-      <footer className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-        <p>© 2025 Simulador de Investimentos Renda Fixa - Arte da Renda</p>
+      <footer className="bg-invest">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-white">
+          <p>© 2025 Simulador de Investimentos Renda Fixa - Arte da Renda</p>
+        </div>
       </footer>
     </div>
   );

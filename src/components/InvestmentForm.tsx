@@ -126,9 +126,10 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     });
   };
 
-  const handleCalculate = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onCalculate(formData);
+    document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleBlurPercentage = (e: React.FocusEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>, value: number) => {
@@ -148,7 +149,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
   };
 
   return (
-    <form onSubmit={handleCalculate} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-3">
           <Label htmlFor="investmentType">Título</Label>
@@ -371,7 +372,7 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" className="w-full md:w-auto">
+        <Button type="submit" className="w-full md:w-auto bg-invest hover:bg-invest/90">
           Calcular Rentabilidade
         </Button>
       </div>

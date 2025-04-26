@@ -1,4 +1,3 @@
-
 import React from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -147,7 +146,7 @@ const InvestmentResults: React.FC<InvestmentResultsProps> = ({ results, visible 
                   type="monotone"
                   dataKey="principal"
                   name="Valor Investido"
-                  stroke="#D3E4FD"
+                  stroke="#a44bc7"
                   strokeWidth={2}
                   dot={false}
                 />
@@ -155,7 +154,7 @@ const InvestmentResults: React.FC<InvestmentResultsProps> = ({ results, visible 
                   type="monotone"
                   dataKey="accumulated"
                   name="Valor Acumulado"
-                  stroke="#0EA5E9"
+                  stroke="#7615ab"
                   strokeWidth={2}
                   dot={false}
                   activeDot={{ r: 8 }}

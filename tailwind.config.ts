@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,10 +62,9 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Add our investment simulator theme colors
 				invest: {
-					light: '#D3E4FD',
-					DEFAULT: '#0EA5E9',
+					light: '#a44bc7',
+					DEFAULT: '#7615ab',
 					dark: '#1A1F2C'
 				}
 			},
