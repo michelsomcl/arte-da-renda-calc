@@ -1,6 +1,4 @@
-
 import React from "react";
-import { formatPercentage } from "@/utils/investment-utils";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -77,4 +75,3 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
 };
 
 export default InvestmentForm;
-

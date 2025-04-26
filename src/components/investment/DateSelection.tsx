@@ -1,13 +1,8 @@
 
 import React from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format, parse } from "date-fns";
 
 interface DateSelectionProps {
   startDate: Date;
@@ -22,77 +17,57 @@ const DateSelection: React.FC<DateSelectionProps> = ({
   onStartDateChange,
   onEndDateChange,
 }) => {
+  const formatDateToString = (date: Date) => {
+    return format(date, "dd/MM/yy");
+  };
+
+  const parseDateString = (dateStr: string): Date | undefined => {
+    try {
+      return parse(dateStr, "dd/MM/yy", new Date());
+    } catch {
+      return undefined;
+    }
+  };
+
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = parseDateString(e.target.value);
+    if (date) {
+      onStartDateChange(date);
+    }
+  };
+
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = parseDateString(e.target.value);
+    if (date) {
+      onEndDateChange(date);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="space-y-3">
         <Label htmlFor="startDate">Data do Investimento</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              id="startDate"
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !startDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {startDate ? (
-                format(startDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
-              ) : (
-                <span>Selecione uma data</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={startDate}
-              onSelect={onStartDateChange}
-              initialFocus
-              locale={ptBR}
-              className={cn("p-3 pointer-events-auto")}
-            />
-          </PopoverContent>
-        </Popover>
+        <Input
+          id="startDate"
+          type="text"
+          placeholder="dd/mm/aa"
+          defaultValue={formatDateToString(startDate)}
+          onChange={handleStartDateChange}
+        />
       </div>
 
       <div className="space-y-3">
         <Label htmlFor="endDate">Vencimento do Investimento</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              id="endDate"
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !endDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {endDate ? (
-                format(endDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
-              ) : (
-                <span>Selecione uma data</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={endDate}
-              onSelect={onEndDateChange}
-              disabled={(date) => date <= startDate}
-              initialFocus
-              locale={ptBR}
-              className={cn("p-3 pointer-events-auto")}
-            />
-          </PopoverContent>
-        </Popover>
+        <Input
+          id="endDate"
+          type="text"
+          placeholder="dd/mm/aa"
+          defaultValue={formatDateToString(endDate)}
+          onChange={handleEndDateChange}
+        />
       </div>
     </div>
   );
 };
 
 export default DateSelection;
-
