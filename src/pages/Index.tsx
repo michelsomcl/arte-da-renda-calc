@@ -1,7 +1,7 @@
-
 import React, { useState } from "react";
 import InvestmentForm, { InvestmentFormData } from "@/components/InvestmentForm";
 import InvestmentResults from "@/components/InvestmentResults";
+import { Button } from "@/components/ui/button";
 import {
   calculateBusinessDays,
   calculateTotalDays,
@@ -18,22 +18,17 @@ const Index = () => {
   const [results, setResults] = useState<any>(null);
 
   const handleCalculate = (formData: InvestmentFormData) => {
-    // Calculate business days between start and end date
     const businessDays = calculateBusinessDays(
       formData.startDate, 
       formData.endDate
     );
     
-    // Calculate total days between start and end date
     const days = calculateTotalDays(formData.startDate, formData.endDate);
     
-    // Calculate IR tax rate based on days
-    const irTaxRate = calculateIRTax(days);
+    const irTaxRate = calculateIRTax(days, formData.investmentType);
     
-    // Calculate IOF tax rate based on days
-    const iofTaxRate = calculateIOFTax(days);
+    const iofTaxRate = calculateIOFTax(days, formData.investmentType);
     
-    // Calculate gross returns based on modality type
     let grossReturn = 0;
     
     switch (formData.modalityType) {
@@ -68,17 +63,15 @@ const Index = () => {
         break;
     }
     
-    // Calculate profit
     const profit = grossReturn - formData.principal;
     
-    // Calculate taxes
     const irValue = profit * irTaxRate;
     const iofValue = profit * iofTaxRate;
     
-    // Calculate net return
-    const netReturn = grossReturn - irValue - iofValue;
+    const netReturn = ['LCD', 'LCI', 'LCA'].includes(formData.investmentType) 
+      ? grossReturn 
+      : grossReturn - irValue - iofValue;
     
-    // Generate chart data
     const chartData = generateChartData(
       formData.startDate,
       formData.endDate,
@@ -93,7 +86,6 @@ const Index = () => {
       }
     );
     
-    // Set results
     setResults({
       principal: formData.principal,
       startDate: formData.startDate,
@@ -110,17 +102,20 @@ const Index = () => {
     });
     
     setShowResults(true);
+    
+    document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-invest shadow-sm">
+      <header className="bg-[#7615ab] shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold text-white">
             Simulador de Investimentos Renda Fixa - Arte da Renda
           </h1>
         </div>
       </header>
+      
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">Dados do Investimento</h2>
@@ -137,14 +132,14 @@ const Index = () => {
           <div className="mt-8 flex justify-center gap-6">
             <Button
               variant="link"
-              className="text-invest hover:text-invest/80"
+              className="text-[#7615ab] hover:text-[#7615ab]/80"
               onClick={() => window.open('https://www.instagram.com/artedarendainvest', '_blank', 'width=800,height=600')}
             >
               Instagram
             </Button>
             <Button
               variant="link"
-              className="text-invest hover:text-invest/80"
+              className="text-[#7615ab] hover:text-[#7615ab]/80"
               onClick={() => window.open('https://www.artedarenda.com.br/', '_blank', 'width=800,height=600')}
             >
               Blog
@@ -152,7 +147,8 @@ const Index = () => {
           </div>
         )}
       </main>
-      <footer className="bg-invest">
+      
+      <footer className="bg-[#7615ab]">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-white">
           <p>© 2025 Simulador de Investimentos Renda Fixa - Arte da Renda</p>
         </div>

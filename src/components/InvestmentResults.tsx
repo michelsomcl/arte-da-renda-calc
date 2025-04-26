@@ -42,6 +42,10 @@ const InvestmentResults: React.FC<InvestmentResultsProps> = ({ results, visible 
     accumulated: item.accumulated,
   }));
 
+  // Calculate the minimum value for Y-axis
+  const minValue = Math.min(...chartData.map(item => Math.min(item.principal, item.accumulated)));
+  const maxValue = Math.max(...chartData.map(item => Math.max(item.principal, item.accumulated)));
+
   return (
     <div className={`space-y-8 animate-fade-in ${visible ? '' : 'hidden'}`}>
       <Card>
@@ -131,6 +135,7 @@ const InvestmentResults: React.FC<InvestmentResultsProps> = ({ results, visible 
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis
+                  domain={[minValue * 0.99, maxValue * 1.01]}
                   tickFormatter={(value) => new Intl.NumberFormat('pt-BR', {
                     notation: 'compact',
                     compactDisplay: 'short',
