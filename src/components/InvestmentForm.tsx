@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -6,6 +7,7 @@ import { useInvestmentForm } from "@/hooks/useInvestmentForm";
 import TypeModality from "./investment/TypeModality";
 import RateInputs from "./investment/RateInputs";
 import DateSelection from "./investment/DateSelection";
+import { formatPercentage } from "@/utils/investment-utils";
 
 interface InvestmentFormProps {
   onCalculate: (formData: any) => void;
