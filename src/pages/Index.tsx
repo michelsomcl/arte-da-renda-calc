@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import InvestmentForm from "@/components/InvestmentForm";
 import InvestmentResults from "@/components/InvestmentResults";
@@ -54,11 +55,13 @@ const Index = () => {
         break;
       case "ipca":
         if (formData.fixedRate) {
+          // For IPCA+ calculations, we use calendar days rather than business days
+          // because IPCA is based on calendar periods
           grossReturn = calculateIPCAReturns(
             formData.principal,
             formData.ipcaRate,
             formData.fixedRate,
-            days
+            days // Using calendar days for IPCA+
           );
         }
         break;

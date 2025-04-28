@@ -131,12 +131,14 @@ export const calculateIPCAReturns = (
   fixedRate: number, // fixed rate on top of IPCA
   days: number
 ): number => {
-  // Convert annual IPCA to the period rate
-  const periodIpcaRate = Math.pow(1 + ipcaRate / 100, days / 365) - 1;
-  // Convert fixed rate to period rate
-  const periodFixedRate = Math.pow(1 + fixedRate / 100, days / 365) - 1;
-  // Calculate final amount (IPCA + fixed rate, compounded)
-  return principal * (1 + periodIpcaRate) * (1 + periodFixedRate);
+  // Sum IPCA and fixed rate first (this is the change)
+  const combinedRate = ipcaRate + fixedRate;
+  
+  // Convert combined annual rate to the period rate
+  const periodRate = Math.pow(1 + combinedRate / 100, days / 365) - 1;
+  
+  // Calculate final amount using combined rate
+  return principal * (1 + periodRate);
 };
 
 // Data for the investment growth chart
