@@ -43,7 +43,6 @@ export const formatCurrency = (value: number): string => {
 
 // Format percentage values with proper pt-BR localization
 export const formatPercentage = (value: number): string => {
-  // Fix: Use toFixed to preserve decimal places instead of toLocaleString
   return value.toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -60,8 +59,8 @@ export const parseCurrencyInput = (input: string): number => {
 
 // Parse percentage input with proper pt-BR localization
 export const parsePercentageInput = (input: string): number => {
-  // Remove percentage symbol and any thousand separators, then replace comma with dot for JavaScript parsing
-  const cleanedInput = input.replace(/[%.]/g, '').replace(',', '.');
+  // Remove percentage symbol and any thousand separators, then replace ALL commas with dots
+  const cleanedInput = input.replace(/[%]/g, '').replace(/\./g, '').replace(/,/g, '.');
   const parsedValue = parseFloat(cleanedInput);
   return isNaN(parsedValue) ? 0 : parsedValue;
 };

@@ -3,6 +3,7 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { parsePercentageInput } from "@/utils/investment-utils";
 
 interface RateInputsProps {
   modalityType: string;
@@ -60,7 +61,7 @@ const RateInputs: React.FC<RateInputsProps> = ({
           onChange={handlers.handleSelicChange}
           onBlur={(e) => handlers.handleBlurPercentage(e, 
             (value) => handlers.handleSelicChange({ target: { value } } as React.ChangeEvent<HTMLInputElement>), 
-            parseFloat(inputs.selicInput)
+            parsePercentageInput(inputs.selicInput)
           )}
           className="text-right"
         />
@@ -99,7 +100,7 @@ const RateInputs: React.FC<RateInputsProps> = ({
           onChange={handlers.handleIpcaChange}
           onBlur={(e) => handlers.handleBlurPercentage(e,
             (value) => handlers.handleIpcaChange({ target: { value } } as React.ChangeEvent<HTMLInputElement>),
-            parseFloat(inputs.ipcaInput)
+            parsePercentageInput(inputs.ipcaInput)
           )}
           className="text-right"
         />
@@ -115,7 +116,7 @@ const RateInputs: React.FC<RateInputsProps> = ({
             onChange={handlers.handlePreFixedChange}
             onBlur={(e) => handlers.handleBlurPercentage(e,
               (value) => handlers.handlePreFixedChange({ target: { value } } as React.ChangeEvent<HTMLInputElement>),
-              parseFloat(inputs.preFixedInput)
+              parsePercentageInput(inputs.preFixedInput)
             )}
             className="text-right"
           />
@@ -132,7 +133,7 @@ const RateInputs: React.FC<RateInputsProps> = ({
             onChange={handlers.handleCdiPercentageChange}
             onBlur={(e) => handlers.handleBlurPercentage(e,
               (value) => handlers.handleCdiPercentageChange({ target: { value } } as React.ChangeEvent<HTMLInputElement>),
-              parseFloat(inputs.cdiPercentageInput)
+              parsePercentageInput(inputs.cdiPercentageInput)
             )}
             className="text-right"
           />
@@ -149,7 +150,7 @@ const RateInputs: React.FC<RateInputsProps> = ({
             onChange={handlers.handleFixedRateChange}
             onBlur={(e) => handlers.handleBlurPercentage(e,
               (value) => handlers.handleFixedRateChange({ target: { value } } as React.ChangeEvent<HTMLInputElement>),
-              parseFloat(inputs.fixedRateInput)
+              parsePercentageInput(inputs.fixedRateInput)
             )}
             className="text-right"
           />
@@ -160,4 +161,3 @@ const RateInputs: React.FC<RateInputsProps> = ({
 };
 
 export default RateInputs;
-

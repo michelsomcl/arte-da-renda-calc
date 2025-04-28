@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { InvestmentFormData } from "@/types/investment";
 import { formatPercentage, parseCurrencyInput, parsePercentageInput } from "@/utils/investment-utils";
