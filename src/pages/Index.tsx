@@ -1,8 +1,8 @@
-
 import React, { useState } from "react";
 import InvestmentForm from "@/components/InvestmentForm";
 import InvestmentResults from "@/components/InvestmentResults";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/toaster";
 import {
   calculateBusinessDays,
   calculateTotalDays,
@@ -55,13 +55,11 @@ const Index = () => {
         break;
       case "ipca":
         if (formData.fixedRate) {
-          // For IPCA+ calculations, we use calendar days rather than business days
-          // because IPCA is based on calendar periods
           grossReturn = calculateIPCAReturns(
             formData.principal,
             formData.ipcaRate,
             formData.fixedRate,
-            days // Using calendar days for IPCA+
+            days
           );
         }
         break;
@@ -157,6 +155,8 @@ const Index = () => {
           <p>© 2025 Simulador de Investimentos Renda Fixa - Arte da Renda</p>
         </div>
       </footer>
+      
+      <Toaster />
     </div>
   );
 };

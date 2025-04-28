@@ -1,9 +1,10 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useInvestmentForm } from "@/hooks/useInvestmentForm";
+import { useToast } from "@/hooks/use-toast";
 import TypeModality from "./investment/TypeModality";
 import RateInputs from "./investment/RateInputs";
 import DateSelection from "./investment/DateSelection";
@@ -20,11 +21,23 @@ const InvestmentForm: React.FC<InvestmentFormProps> = ({ onCalculate }) => {
     inputs, 
     handlers 
   } = useInvestmentForm();
+  
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onCalculate(formData);
-    document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
+    
+    // Show toast notification
+    toast({
+      title: "Verifique o resultado",
+      duration: 3000,
+    });
+    
+    // Immediate scroll to results
+    setTimeout(() => {
+      document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   return (
