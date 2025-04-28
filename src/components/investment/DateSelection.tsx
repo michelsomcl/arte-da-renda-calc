@@ -38,12 +38,12 @@ const DateSelection: React.FC<DateSelectionProps> = ({
   };
   return <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="space-y-3">
-        <Label htmlFor="startDate" className="rounded-none bold-none">Data do Investimento (utilize as setas ↨ para selecionar o mês)</Label>
+        <Label htmlFor="startDate" className="rounded-none bold-none">Data do Investimento (na navegador utilize ↨ no teclado para selecionar o mês)</Label>
         <Input id="startDate" type="text" placeholder="dd/mm/aa" defaultValue={formatDateToString(startDate)} onChange={handleStartDateChange} />
       </div>
 
       <div className="space-y-3">
-        <Label htmlFor="endDate">Vencimento do Investimento</Label>
+        <Label htmlFor="endDate">Vencimento do Investimento (na navegador utilize ↨ no teclado para selecionar o mês)</Label>
         <Input id="endDate" type="text" placeholder="dd/mm/aa" defaultValue={formatDateToString(endDate)} onChange={handleEndDateChange} />
       </div>
     </div>;
